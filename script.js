@@ -1,13 +1,18 @@
 const chatBody = document.querySelector(".chat-body");
 const messageInput = document.querySelector(".message-input");
 const sendMessageBtn = document.querySelector("#send-message");
+const fileInput = document.querySelector("#file-input");
 
 // API setup
 const apiKey = "AIzaSyAWFJKOvcVUvQQagqV6eRMCHIS6cKPIH3Q";
 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`
 
 const userData = {
-    message: null
+    message: null,
+    file: {
+        data: null,
+        mime_type: null
+    }
 }
 
 // Create message element with dynamic classes and return it
@@ -28,7 +33,7 @@ const generateBotResponse = async(incomingMessageDiv) => {
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({
             contents: [{
-                parts: [{text: userData.message}]
+                parts: [{text: userData.message}, ...(userData.file.data ? [{inline_data: userData.file}] : [])]
             }]
         })
     }
@@ -44,11 +49,14 @@ const generateBotResponse = async(incomingMessageDiv) => {
         messageElement.innerText = apiResponseText;
     }
     catch(error){
+        // Handle error in API response
         console.log(error);
         messageElement.innerText = error.message;
         messageElement.style.color = "#ff0000";
     }
     finally{
+        // Reset user's file data, removing thinking indicator and scroll chat to bottom
+        userData.file = {};
         incomingMessageDiv.classList.remove("thinking");
         chatBody.scrollTo({top: chatBody.scrollHeight, behavior: "smooth"});
     }
@@ -61,7 +69,8 @@ const handleOutgoingMessage = (e) => {
     messageInput.value = "";
 
     // Create and display user messages
-    const messageContent = `<div class="message-text"></div>`;
+    const messageContent = `<div class="message-text"></div>
+    ${userData.file.data ? `<img scr="data:${userData.file.mime_type};base64,${userData.file.data}" class="attachment" />` : ""}`;
     const outgoingMessageDiv = createMessageElement(messageContent, "user-message");
     outgoingMessageDiv.querySelector(".message-text").textContent = userData.message;
     chatBody.appendChild(outgoingMessageDiv);
@@ -95,4 +104,25 @@ messageInput.addEventListener("keydown", (e) => {
     }
 });
 
-sendMessageBtn.addEventListener("click", (e) => handleOutgoingMessage(e))
+// Handle fil input change
+fileInput.addEventListener("change", () => {
+    const file = fileInput.files[0];
+    if(!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        const base64String = e.target.result.split(",")[1];
+
+        // Stor file data in userData
+        userData.file = {
+            data: base64String,
+            mime_type: file.type
+        }
+
+        fileInput.value = "";
+    }
+    reader.readAsDataURL(file);
+})
+
+sendMessageBtn.addEventListener("click", (e) => handleOutgoingMessage(e));
+document.querySelector("#file-upload").addEventListener("click", () => fileInput.click());
