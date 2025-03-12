@@ -70,7 +70,7 @@ const handleOutgoingMessage = (e) => {
 
     // Create and display user messages
     const messageContent = `<div class="message-text"></div>
-    ${userData.file.data ? `<img scr="data:${userData.file.mime_type};base64,${userData.file.data}" class="attachment" />` : ""}`;
+    ${userData.file.data ? `<img src="data:${userData.file.mime_type};base64,${userData.file.data}" class="attachment" />` : ""}`;
     const outgoingMessageDiv = createMessageElement(messageContent, "user-message");
     outgoingMessageDiv.querySelector(".message-text").textContent = userData.message;
     chatBody.appendChild(outgoingMessageDiv);
