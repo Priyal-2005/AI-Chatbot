@@ -5,10 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Chatbot</title>
     <!-- Linking Google fonts for icons -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0" />
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+    <button id="chatbot-toggle">
+        <span class="material-symbols-rounded">mode_comment</span>
+        <span class="material-symbols-rounded">close</span>
+    </button>
     <div class="chatbot-popup">
         <!-- Chatbot Header -->
         <div class="chat-header">
@@ -18,7 +23,7 @@
                 </svg>
                 <h2 class="logo-text">Chatbot</h2>
             </div>
-            <button id="close-chatbot" class="material-symbols-outlined">keyboard_arrow_down</button>
+            <button id="close-chatbot" class="material-symbols-rounded">keyboard_arrow_down</button>
         </div>
 
         <!-- Chatbot Body -->
@@ -40,10 +45,10 @@
                     <div class="file-upload-wrapper">
                         <input type="file" accept="images/*" id="file-input" hidden>
                         <img src="#">
-                        <button type="button" id="file-upload" class="material-symbols-outlined">attach_file</button>
-                        <button type="button" id="file-cancel" class="material-symbols-outlined">close</button>
+                        <button type="button" id="file-upload" class="material-symbols-rounded">attach_file</button>
+                        <button type="button" id="file-cancel" class="material-symbols-rounded">close</button>
                     </div>
-                    <button type="submit" id="send-message" class="material-symbols-outlined">arrow_upward</button>
+                    <button type="submit" id="send-message" class="material-symbols-rounded">arrow_upward</button>
                 </div>
             </form>
         </div>

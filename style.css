@@ -10,20 +10,65 @@
 
 body{
     display: flex;
-    align-items: center;
-    justify-content: center;
     min-height: 100vh;
     background: linear-gradient(#eeeeff, #c8c7ff);
 }
 
+#chatbot-toggle{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    bottom: 30px;
+    right: 35px;
+    border: none;
+    height: 50px;
+    width: 50px;
+    cursor: pointer;
+    border-radius: 50%;
+    background: #5350c4;
+    transition: all 0.2s ease;
+}
+
+body.show-chatbot #chatbot-toggle{
+    transform: rotate(90deg);
+}
+
+#chatbot-toggle span{
+    color: #fff;
+    position: absolute;
+}
+
+body.show-chatbot #chatbot-toggle span:first-child,
+#chatbot-toggle span:last-child{
+    opacity: 0;
+}
+
+body.show-chatbot #chatbot-toggle span:last-child{
+    opacity: 1;
+}
+
 .chatbot-popup{
-    position: relative;
+    position: fixed;
+    right: 70px;
+    bottom: 90px;
     width: 420px;
     background: #fff;
     overflow: hidden;
-    border-radius: 15px;
+    border-radius: 20px 20px 5px 20px;
+    opacity: 0;
+    transform: scale(0.2);
+    transform-origin: bottom right;
+    pointer-events: none;
     box-shadow: 0 0 128px 0 rgba(0,0,0,0.1),
     0 32px 64px -48px rgba(0,0,0,0.5);
+    transition: all 0.1s ease;
+}
+
+body.show-chatbot .chatbot-popup{
+    opacity: 1;
+    pointer-events: auto;
+    transform: scale(1);
 }
 
 .chat-header{
@@ -179,6 +224,7 @@ body{
     }
 }
 
+/* Chat Footer */
 .chat-footer{
     position: absolute;
     width: 100%;
@@ -200,15 +246,23 @@ body{
     outline: 2px solid #5350c4;
 }
 
+/* Chat Form */
 .chat-form .message-input{
     border: none;
     outline: none;
     height: 47px;
     width: 100%;
     resize: none;
+    max-height: 180px;
     font: 0.95rem;
     padding: 14px 0 13px 18px;
     border-radius: inherit;
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+}
+
+.chat-form .message-input:hover{
+    scrollbar-color: #ccccf5 transparent;
 }
 
 .chat-form .chat-controls{
@@ -295,4 +349,37 @@ em-emoji-picker{
 
 body.show-emoji-picker em-emoji-picker{
     visibility: visible;
+}
+
+/* Responsive media query for mobil screens */
+@media (max-width: 520px) {
+    #chatbot-toggle{
+        right: 20px;
+        bottom: 20px;
+    }
+
+    .chatbot-popup{
+        right: 0;
+        bottom: 0;
+        height: 100%;
+        border-radius: 0;
+        width: 100%;
+    }
+
+    .chatbot-popup .chat-header{
+        padding: 12px 15px;
+    }
+
+    .chat-body{
+        height: calc(90% - 55px);
+        padding: 25px 15px;
+    }
+
+    .chat-footer{
+        padding: 10px 15px 15px;
+    }
+
+    .chat-form .file-upload-wrapper.file-uploaded #file-cancel{
+        opacity: 0;
+    }
 }

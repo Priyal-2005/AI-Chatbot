@@ -4,6 +4,8 @@ const sendMessageBtn = document.querySelector("#send-message");
 const fileInputBtn = document.querySelector("#file-input");
 const fileUpload = document.querySelector(".file-upload-wrapper");
 const fileCancelBtn = document.querySelector("#file-cancel");
+const chatbotToggleBtn = document.querySelector("#chatbot-toggle");
+const closeChatbot = document.querySelector("#close-chatbot");
 
 // API setup
 const apiKey = "AIzaSyAWFJKOvcVUvQQagqV6eRMCHIS6cKPIH3Q";
@@ -16,6 +18,8 @@ const userData = {
         mime_type: null
     }
 }
+
+const initialInputHeight = messageInput.scrollHeight;
 
 // Create message element with dynamic classes and return it
 const createMessageElement = (content, ...classes) => {
@@ -70,6 +74,7 @@ const handleOutgoingMessage = (e) => {
     userData.message = messageInput.value.trim();
     messageInput.value = "";
     fileUpload.classList.remove("file-uploaded");
+    messageInput.dispatchEvent(new Event("input"));
 
     // Create and display user messages
     const messageContent = `<div class="message-text"></div>
@@ -102,9 +107,16 @@ const handleOutgoingMessage = (e) => {
 // Handle Enter key press for sending messages
 messageInput.addEventListener("keydown", (e) => {
     const userMessage = e.target.value.trim();
-    if(e.key === "Enter" && userMessage) {
+    if(e.key === "Enter" && userMessage && !e.shiftKey && window.innerWidth > 768) {
         handleOutgoingMessage(e);
     }
+});
+
+// Adjust input field height dynamically
+messageInput.addEventListener("input", () => {
+    messageInput.style.height = `${initialInputHeight}px`;
+    messageInput.style.height = `${messageInput.scrollHeight}px`;
+    document.querySelector(".chat-form").style.borderRadius = messageInput.scrollHeight > initialInputHeight ? "15px" : "32px";
 });
 
 // Handle file input change and preview the selected file
@@ -159,3 +171,5 @@ document.querySelector(".chat-form").appendChild(picker);
 
 sendMessageBtn.addEventListener("click", (e) => handleOutgoingMessage(e));
 document.querySelector("#file-upload").addEventListener("click", () => fileInputBtn.click());
+chatbotToggleBtn.addEventListener("click", () => document.body.classList.toggle("show-chatbot"));
+closeChatbot.addEventListener("click", () => document.body.classList.remove("show-chatbot"));
